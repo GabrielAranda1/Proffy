@@ -1,39 +1,56 @@
-import React from "react"
+import React from 'react'
 
-import whatsappIcon from "../../assets/images/icons/whatsapp.svg"
+import whatsappIcon from '../../assets/images/icons/whatsapp.svg'
 
-import "./styles.css"
+import './styles.css'
+import api from '../../services/api'
 
-function TeacherItem() {
+export interface Teacher {
+  id: number
+  avatar: string
+  bio: string
+  cost: number
+  name: string
+  subject: string
+  whatsapp: string
+}
+
+interface TeacherItemProps {
+  teacher: Teacher
+}
+
+const TeacherItem: React.FC<TeacherItemProps> = ({ teacher }) => {
+  function createNewConnection() {
+    api.post('connections', {
+      user_id: teacher.id,
+    })
+  }
+
   return (
-    <article className="teacher-item">
+    <article className='teacher-item'>
       <header>
-        <img
-          src="https://avatars2.githubusercontent.com/u/37005564?s=460&u=589857045fb1401ff2557669102ac13e2316d9c2&v=4"
-          alt="Gabriel Aranda"
-        />
+        <img src={teacher.avatar} alt={teacher.name} />
         <div>
-          <strong>Gabriel Aranda</strong>
-          <span>Redação</span>
+          <strong>{teacher.name}</strong>
+          <span>{teacher.subject}</span>
         </div>
       </header>
 
-      <p>
-        Dinheiro a nossa tropa tem, Humildade é lixo mas sem render pra ninguém
-        <br /> <br />
-        Eu vou guardar meus cash pra multiplicar meus bens, Porque minha maior
-        meta é deixar minha família bem Pode crer
-      </p>
+      <p>{teacher.bio}</p>
 
       <footer>
         <p>
           Preço/hora
-          <strong>R$169,00</strong>
+          <strong>{teacher.cost}</strong>
         </p>
-        <button type="button">
-          <img src={whatsappIcon} alt="Zap kkkkkkkkk" />
+        <a
+          target='_blank'
+          onClick={createNewConnection}
+          href={`https://wa.me/${teacher.whatsapp}`}
+        >
+          <img src={whatsappIcon} alt='Zap kkkkkkkkk' />
           Entrar em contato
-        </button>
+        </a>
       </footer>
     </article>
   )
